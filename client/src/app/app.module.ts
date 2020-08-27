@@ -9,6 +9,7 @@ import { SecondComponent } from './shared/second/second.component';
 import { FirstComponent } from './shared/first/first.component';
 import { Routes, RouterModule, ROUTES } from '@angular/router';
 import { LoginComponent } from './shared/login/login.component';
+import { CustomMaterialModule } from './custom-material/custom-material.module';
 const appRoutes: Routes = [
   { path: '', component: AppComponent, data: { title: 'First Component' } },
   { path: 'first', component: FirstComponent, data: { title: 'First Component' } },
@@ -24,6 +25,7 @@ const appRoutes: Routes = [
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
+    CustomMaterialModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [],

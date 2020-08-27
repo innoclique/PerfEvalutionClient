@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from '../../services/auth.service'
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -11,8 +12,11 @@ export class LoginComponent implements OnInit {
   public loginInvalid: boolean;
   private formSubmitAttempt: boolean;
   private returnUrl: string;
+  showSpinner: boolean;
   constructor(private fb: FormBuilder,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router,) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -20,27 +24,30 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
   }
- async onSubmit() {
-   debugger
-this.formSubmitAttempt=true;
+  async onSubmit() {
+    debugger
+    this.formSubmitAttempt = true;
 
-if(this.loginForm.invalid){
-  this.loginInvalid=true;
-  return false;
-}
-try {
-  
-          const Email = this.loginForm.get('username').value;
-  
-          const Password = this.loginForm.get('password').value;
-  
-          await this.authService.login({Email, Password});
-  
-        } catch (err) {
-  
-          this.loginInvalid = true;
-  
-        }
+    if (this.loginForm.invalid) {
+      this.loginInvalid = true;
+      return false;
+    }
+    try {
+      this.showSpinner = true;
+      const email = this.loginForm.get('username').value;
+
+      const password = this.loginForm.get('password').value;
+      const LoginModel = {Email : email, Password: password};
+      await this.authService.login(LoginModel).subscribe(x => {
+        debugger
+this.router.navigate(['first']);
+      })
+
+    } catch (err) {
+      this.showSpinner = false;
+      this.loginInvalid = true;
+
+    }
   }
 
 

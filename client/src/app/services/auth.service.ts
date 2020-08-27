@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { logging } from 'protractor';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map, retry, catchError } from 'rxjs/operators';
 import { UserModel } from '../Models/User';
@@ -14,7 +14,6 @@ export class AuthService {
 
   constructor(private Http: HttpClient) { }
   FindEmail(Email): Observable<UserModel> {
-
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/GetUserByEmail', { Email })
       .pipe(retry(1), catchError(this.errorHandle));
 
@@ -37,6 +36,8 @@ export class AuthService {
   }
 
   login(Model: { Email: any; Password: any; }): Observable<any> {
+    //return of(true);
+
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/Authenticate', Model)
       .pipe(map(UserModel => {
         if (UserModel && UserModel.AccessToken) {
