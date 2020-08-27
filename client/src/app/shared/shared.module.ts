@@ -40,10 +40,16 @@ import {OverlayModule} from '@angular/cdk/overlay';
 import { RouterModule } from '@angular/router';
 import { FirstComponent } from './first/first.component';
 import { SecondComponent } from './second/second.component';
+import { LoginComponent } from './login/login.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
-  declarations: [NavbarComponent, FirstComponent, SecondComponent],
+  declarations: [NavbarComponent, FirstComponent, SecondComponent, LoginComponent],
   imports: [
+    FormsModule,
     CommonModule,
+    HttpClientModule,
+    ReactiveFormsModule,
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,

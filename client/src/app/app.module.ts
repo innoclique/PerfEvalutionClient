@@ -8,10 +8,12 @@ import {SharedModule} from './shared/shared.module'
 import { SecondComponent } from './shared/second/second.component';
 import { FirstComponent } from './shared/first/first.component';
 import { Routes, RouterModule, ROUTES } from '@angular/router';
+import { LoginComponent } from './shared/login/login.component';
 const appRoutes: Routes = [
   { path: '', component: AppComponent, data: { title: 'First Component' } },
   { path: 'first', component: FirstComponent, data: { title: 'First Component' } },
-  { path: 'second', component: SecondComponent, data: { title: 'Second Component' } }
+  { path: 'second', component: SecondComponent, data: { title: 'Second Component' }},
+  { path: 'login', component: LoginComponent, data: { title: 'Second Component' }}
 ];
 @NgModule({
   declarations: [
