@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       await this.authService.login(LoginModel).subscribe(x => {
         
 
-        if (!x.isPswChanged) {
+        if (!x.IsPswChangedOnFirstLogin) {
           this.router.navigate(['resetPassword']);
         } else {
           this.router.navigate(['first']);
