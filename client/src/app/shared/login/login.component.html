@@ -15,8 +15,17 @@
           <tr>
           <td><mat-form-field class="example-full-width">
             <input matInput placeholder="Password"  formControlName="password" type="password" name="password" required>
-          </mat-form-field></td>
-        </tr></table>
+          </mat-form-field>
+          <a class="forgot-password"  routerLink='/forgotPassword'> Forgot
+            Password? </a>
+        </td>
+        </tr>
+
+       
+
+        
+      
+      </table>
       </form>
       <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
     </mat-card-content>
