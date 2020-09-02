@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
     });
   }
   async onSubmit() {
-    debugger
+    
     this.formSubmitAttempt = true;
 
     if (this.loginForm.invalid) {
@@ -39,8 +39,13 @@ export class LoginComponent implements OnInit {
       const password = this.loginForm.get('password').value;
       const LoginModel = {Email : email, Password: password};
       await this.authService.login(LoginModel).subscribe(x => {
-        debugger
-this.router.navigate(['first']);
+        
+
+        if (!x.isPswChanged) {
+          this.router.navigate(['resetPassword']);
+        } else {
+          this.router.navigate(['first']);
+        }
       })
 
     } catch (err) {

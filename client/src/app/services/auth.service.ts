@@ -38,14 +38,16 @@ export class AuthService {
   login(Model: { Email: any; Password: any; }): Observable<any> {
     //return of(true);
 
-    return this.Http.post<UserModel>(environment.ApiPath + 'Identity/Authenticate', Model)
+    return this.Http.post<any>(environment.ApiPath + 'Identity/Authenticate', Model)
       .pipe(map(UserModel => {
         if (UserModel && UserModel.AccessToken) {
           localStorage.setItem('UserName', UserModel.UserName);
           localStorage.setItem('RefreshToken', UserModel.RefreshToken);
           localStorage.setItem('role', UserModel.Role);
+          localStorage.setItem("user", JSON.stringify(UserModel));
           this.setToken(UserModel.AccessToken);
         }
+        return UserModel;
       }));
   }
 
@@ -61,6 +63,29 @@ export class AuthService {
       }));
 
   }
+
+
+
+  setLSObject(key: string, obj: any) {
+    window.localStorage.setItem(key, JSON.stringify(obj));
+  }
+
+  getLSObject(key: string) {
+    return JSON.parse(window.localStorage.getItem(key));
+  }
+  resetPassword(Model: {Email: any}): Observable<any> {
+
+    return this.Http.post<UserModel>(environment.ApiPath + 'Identity/sendResetPswLink', Model);
+  }
+
+  
+  updatePassword(Model: {userId: any; password: any;}): Observable<any> {
+
+    return this.Http.post<any>(environment.ApiPath + 'Identity/updatePassword', Model);
+     
+  }
+
+
   LogOut() {
     return this.Http.delete(environment.ApiPath + 'Identity/Log_Out');
   }
