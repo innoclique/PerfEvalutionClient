@@ -1,32 +1,18 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogRef } from '@angular/material/dialog';
 import { AlertDialog } from 'src/app/Models/AlertDialog';
 
 @Component({
   selector: 'app-alert',
   templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.scss']
+  styleUrls: ['./alert.component.css']
 })
 export class AlertComponent implements OnInit {
-  @Input()
-  cancelButtonText: String;
-  @Input()
-  confirmButtonText: String;
-  @Input()
-  showConfirm: boolean;
-  @Input()
-  showCancel: boolean = true;
-  @Input()
-  content: String;
-  @Input()
-  title: String;
 
   public data: AlertDialog;
   constructor(
     private dialogRef: MatDialogRef<AlertComponent>, @Inject(MAT_DIALOG_DATA) data: any) {    
     this.data = data;
-
-
   }
 
   ngOnInit(): void {

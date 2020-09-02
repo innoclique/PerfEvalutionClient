@@ -11,7 +11,7 @@ import { UserModel } from '../Models/User';
   providedIn: 'root'
 })
 export class AuthService {
-
+currentUser:any={};
   constructor(private Http: HttpClient) { }
   FindEmail(Email): Observable<UserModel> {
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/GetUserByEmail', { Email })
@@ -37,7 +37,7 @@ export class AuthService {
 
   login(Model: { Email: any; Password: any; }): Observable<any> {
     //return of(true);
-
+this.currentUser.email=Model.Email;
     return this.Http.post<any>(environment.ApiPath + 'Identity/Authenticate', Model)
       .pipe(map(UserModel => {
         if (UserModel && UserModel.AccessToken) {
@@ -46,6 +46,7 @@ export class AuthService {
           localStorage.setItem('role', UserModel.Role);
           localStorage.setItem("user", JSON.stringify(UserModel));
           this.setToken(UserModel.AccessToken);
+          this.currentUser=UserModel;
         }
         return UserModel;
       }));
@@ -86,8 +87,8 @@ export class AuthService {
   }
 
 
-  LogOut() {
-    return this.Http.delete(environment.ApiPath + 'Identity/Log_Out');
+  LogOut() {    
+    return this.Http.delete(environment.ApiPath + 'Identity/Log_Out',this.currentUser.email);
   }
 
   CreateUser(UserModel) {

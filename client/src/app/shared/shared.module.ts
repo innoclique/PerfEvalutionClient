@@ -16,16 +16,16 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { AlertComponent } from './alert/alert.component'
 
 @NgModule({
-  declarations: [NavbarComponent, FirstComponent, SecondComponent, LoginComponent, ForgotPasswordComponent, ResetPasswordComponent],
+  declarations: [NavbarComponent, FirstComponent, SecondComponent, LoginComponent, ForgotPasswordComponent, ResetPasswordComponent,AlertComponent],
   imports: [
-    FormsModule,
-    CommonModule,
-    HttpClientModule,
-    ReactiveFormsModule,
     
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,    
     RouterModule,
     CustomMaterialModule
   ],
-  exports:[NavbarComponent]
+  exports:[NavbarComponent,AlertComponent]
 })
 export class SharedModule { }
