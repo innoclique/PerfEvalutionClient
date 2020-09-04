@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { logging } from 'protractor';
 import { Observable, throwError, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { map, retry, catchError } from 'rxjs/operators';
+import { map, retry, catchError, tap, mapTo } from 'rxjs/operators';
 import { UserModel } from '../Models/User';
 import { error } from 'console';
 
@@ -30,7 +30,7 @@ export class AuthService {
 
   RefreshToken(refreshtoken: string) {
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/Refresh_Token', { refreshtoken })
-      .pipe(map(UserModel => {
+      .pipe(tap(UserModel => {
         this.setToken(UserModel.AccessToken);
         localStorage.setItem('RefreshToken', UserModel.RefreshToken);
       }), catchError(this.errorHandle));
@@ -41,8 +41,7 @@ export class AuthService {
     this.currentUser.email = Model.Email;
     return this.Http.post<any>(environment.ApiPath + 'Identity/Authenticate', Model)
       .pipe(map(UserModel => {
-        if (UserModel && UserModel.AccessToken) {
-          debugger
+        if (UserModel && UserModel.AccessToken) {          
           localStorage.setItem('UserName', UserModel.UserName);
           localStorage.setItem('RefreshToken', UserModel.RefreshToken);
           localStorage.setItem('role', UserModel.Role);
@@ -97,15 +96,24 @@ export class AuthService {
       this.getUser();
     }
     let m = { email: this.currentUser.Email };
-    let headers = new HttpHeaders();
-    headers = headers.set('Authorization', `Bearer ${this.currentUser.AccessToken}`)
-     this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m, { headers }).subscribe(r=>{
+    // let headers = new HttpHeaders();
+    // headers = headers.set('Authorization', `Bearer ${this.currentUser.AccessToken}`)
+     this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m).subscribe(r=>{
       localStorage.clear(); 
      },error=>{
       localStorage.clear();
      },() =>{      
       
      })
+
+
+     return this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m).pipe(
+      tap(() => localStorage.clear()),
+      mapTo(true),
+      catchError(error => {
+        alert(error.error);
+        return of(false);
+      }));
 
   }
 
