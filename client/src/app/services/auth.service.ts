@@ -5,13 +5,14 @@ import { Observable, throwError, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map, retry, catchError } from 'rxjs/operators';
 import { UserModel } from '../Models/User';
+import { error } from 'console';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-currentUser:any={};
+  currentUser: any = {};
   constructor(private Http: HttpClient) { }
   FindEmail(Email): Observable<UserModel> {
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/GetUserByEmail', { Email })
@@ -37,16 +38,17 @@ currentUser:any={};
 
   login(Model: { Email: any; Password: any; }): Observable<any> {
     //return of(true);
-this.currentUser.email=Model.Email;
+    this.currentUser.email = Model.Email;
     return this.Http.post<any>(environment.ApiPath + 'Identity/Authenticate', Model)
       .pipe(map(UserModel => {
         if (UserModel && UserModel.AccessToken) {
+          debugger
           localStorage.setItem('UserName', UserModel.UserName);
           localStorage.setItem('RefreshToken', UserModel.RefreshToken);
           localStorage.setItem('role', UserModel.Role);
           localStorage.setItem("user", JSON.stringify(UserModel));
           this.setToken(UserModel.AccessToken);
-          this.currentUser=UserModel;
+          this.currentUser = UserModel;
         }
         return UserModel;
       }));
@@ -74,21 +76,37 @@ this.currentUser.email=Model.Email;
   getLSObject(key: string) {
     return JSON.parse(window.localStorage.getItem(key));
   }
-  resetPassword(Model: {Email: any}): Observable<any> {
+  resetPassword(Model: { Email: any }): Observable<any> {
 
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/sendResetPswLink', Model);
   }
-
-  
-  updatePassword(Model: {userId: any; password: any;}): Observable<any> {
-
-    return this.Http.post<any>(environment.ApiPath + 'Identity/updatePassword', Model);
-     
+  getUser() {
+    debugger
+    this.currentUser = this.getLSObject('user')
   }
 
+  updatePassword(Model: { userId: any; password: any; }): Observable<any> {
 
+    return this.Http.post<any>(environment.ApiPath + 'Identity/updatePassword', Model);
+
+  }
+
+/**Logout API Calling */
   LogOut() {    
-    return this.Http.delete(environment.ApiPath + 'Identity/Log_Out',this.currentUser.email);
+    if (!this.currentUser.Email) {
+      this.getUser();
+    }
+    let m = { email: this.currentUser.Email };
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${this.currentUser.AccessToken}`)
+     this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m, { headers }).subscribe(r=>{
+      localStorage.clear(); 
+     },error=>{
+      localStorage.clear();
+     },() =>{      
+      
+     })
+
   }
 
   CreateUser(UserModel) {
@@ -109,6 +127,7 @@ this.currentUser.email=Model.Email;
   }
 
   Islogin() {
+
     if (localStorage.getItem('token') === null) { return false; }
     else { return true; }
   }
@@ -117,7 +136,7 @@ this.currentUser.email=Model.Email;
   errorHandle(error) {
     let errormgs = {};
     if (error.error instanceof ErrorEvent) {
-            // get client side error
+      // get client side error
       errormgs = error.error.message;
     }
     else {
