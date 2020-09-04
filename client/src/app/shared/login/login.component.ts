@@ -6,6 +6,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AlertComponent } from '../alert/alert.component';
 import { AlertDialog } from '../../Models/AlertDialog';
 import { ThemeService } from 'src/app/services/theme.service';
+import { Constants } from '../AppConstants';
+import { NotificationService } from '../../services/notification.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -23,7 +25,8 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public dialog: MatDialog,
-    public themeService: ThemeService) { }
+    public themeService: ThemeService,
+    private snack: NotificationService) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -32,6 +35,7 @@ export class LoginComponent implements OnInit {
     });
     this.alert = new AlertDialog();
   }
+  /**Login Submit */
   async onSubmit() {
 
     this.formSubmitAttempt = true;
@@ -47,24 +51,26 @@ export class LoginComponent implements OnInit {
       const password = this.loginForm.get('password').value;
       const LoginModel = { Email: email, Password: password };
       await this.authService.login(LoginModel).subscribe(x => {
-        debugger
         this.router.navigate(['first']);
       }, error => {
-        debugger
+        if (error.message === Constants.DuplicateSession) {
+          this.openDialog()
+        } if (error.message === Constants.InvalidCredentials) {
 
-        this.openDialog()
-
+        }
+        this.snack.error('Invalid Credentials')
+        this.showSpinner = false;
       })
 
     } catch (err) {
-      debugger
-      this.openDialog()
+      this.snack.error(err.message)
       this.showSpinner = false;
-      this.loginInvalid = true;
-
     }
+
+
   }
 
+  /**To alert user for duplicate sessions */
   openDialog() {
     this.alert.Title = "Secure Alert";
     this.alert.Content = "We found that you have already logged in some where. Please logout from other session, to continue click on logout";
@@ -81,13 +87,11 @@ export class LoginComponent implements OnInit {
     dialogConfig.height = "300px";
     dialogConfig.maxWidth = '100%';
     dialogConfig.minWidth = '40%';
-    
 
-    var ff = this.dialog.open(AlertComponent, dialogConfig);
-    ff.afterClosed().subscribe(resp => {
-      this.authService.LogOut().subscribe(x=>{
-        debugger
-      })
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      this.authService.LogOut()
       console.log('alert dialog', resp);
     })
   }

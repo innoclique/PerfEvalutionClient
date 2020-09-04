@@ -11,4 +11,7 @@
         width:100%
     }
 
-    
+    .snackBar{
+      color:white;
+      background: hotpink;
+    }

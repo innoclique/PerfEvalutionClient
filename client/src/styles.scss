@@ -7,9 +7,16 @@ html, body {
     margin: 0;
     height: 100%;
   }
-  
+
+  .success-snackbar {
+    background:rgb(0,173,72);
+  }
+  .error-snackbar {
+    background:rgb(173,35,0);
+  }
   @media only screen and (max-width: 600px)  {
     html {
       font-size: 80%;
     }
   }
+  

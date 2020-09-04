@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { AuthService } from 'src/app/services/auth.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -13,6 +14,7 @@ export class NavbarComponent implements OnInit {
   drawer: MatSidenav;
   isDarkTheme: Observable<boolean>;
   constructor(public authService: AuthService,
+    private router: Router,
     private themeService: ThemeService) { }
   opened: boolean;
   ngOnInit(): void {
@@ -20,5 +22,9 @@ export class NavbarComponent implements OnInit {
   }
   toggleDarkTheme(checked: boolean) {
     this.themeService.setDarkTheme(checked);
+  }
+  logOut(){    
+    this.authService.LogOut()
+     this.router.navigate(['login'])
   }
 }
