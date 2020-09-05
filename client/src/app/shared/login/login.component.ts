@@ -8,6 +8,7 @@ import { AlertDialog } from '../../Models/AlertDialog';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Constants } from '../AppConstants';
 import { NotificationService } from '../../services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     public themeService: ThemeService,
-    private snack: NotificationService) { }
+    private snack: NotificationService,
+    public translate: TranslateService) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -58,7 +60,7 @@ export class LoginComponent implements OnInit {
         } if (error.message === Constants.InvalidCredentials) {
 
         }
-        this.snack.error('Invalid Credentials')
+        this.snack.error(this.translate.instant('Login.InvalidCredentials'));
         this.showSpinner = false;
       })
 
