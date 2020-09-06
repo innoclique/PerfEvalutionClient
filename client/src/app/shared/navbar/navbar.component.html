@@ -3,14 +3,10 @@
       <button *ngIf="authService.Islogin()" type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" color="warn">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <!-- <span><img src="http://ageistech.com/wp-content/uploads/2020/03/aegis-logo.png"></span> -->
-      <span><img src="http://opt-assess.com/wp-content/uploads/2017/11/logo-1.png"></span>
-      <!-- <span><img src="../../../assets/images/logo.png"></span> -->
-
+      <span><img src="../../../assets/opa.png"></span>
       <span class="spacer"></span>
-      <mat-slide-toggle [checked]="isDarkTheme | async" (change)="toggleDarkTheme($event.checked)">Dark theme</mat-slide-toggle>
-      <a mat-button routerLink="/register">Register</a>
-      <a mat-button routerLink="/login">Login</a>
+     
+      
     </mat-toolbar-row>
   </mat-toolbar>
   <mat-sidenav-container  class="example-container">
@@ -18,7 +14,8 @@
       <mat-nav-list>
         <a mat-list-item routerLink='/first'>First Component</a>
         <a mat-list-item routerLink='/second'>Second Component</a>
-        <a mat-list-item routerLink='/login'>Login</a>
+        <a *ngIf="!authService.Islogin()" mat-list-item routerLink='/login'>Login</a>
+        <a *ngIf="authService.Islogin()" (click)="!!logOut()" mat-list-item [routerLink]="" >Logout</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>

@@ -12,18 +12,28 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {CustomMaterialModule} from '../custom-material/custom-material.module';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component'
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AlertComponent } from './alert/alert.component';
+import { MatSpinnerOverlayComponent } from './mat-spinner-overlay/mat-spinner-overlay.component'
+
 @NgModule({
-  declarations: [NavbarComponent, FirstComponent, SecondComponent, LoginComponent, ForgotPasswordComponent, ResetPasswordComponent],
+  declarations: [NavbarComponent, 
+    FirstComponent, 
+    SecondComponent, 
+    LoginComponent, 
+    ForgotPasswordComponent, 
+    ResetPasswordComponent,
+    AlertComponent,
+    MatSpinnerOverlayComponent],
   imports: [
-    FormsModule,
-    CommonModule,
-    HttpClientModule,
-    ReactiveFormsModule,
     
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,    
     RouterModule,
     CustomMaterialModule
   ],
-  exports:[NavbarComponent]
+  exports:[NavbarComponent,AlertComponent]
 })
 export class SharedModule { }

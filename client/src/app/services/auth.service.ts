@@ -5,13 +5,14 @@ import { Observable, throwError, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map, retry, catchError } from 'rxjs/operators';
 import { UserModel } from '../Models/User';
+import { error } from 'console';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  currentUser: any = {};
   constructor(private Http: HttpClient) { }
   FindEmail(Email): Observable<UserModel> {
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/GetUserByEmail', { Email })
@@ -37,15 +38,17 @@ export class AuthService {
 
   login(Model: { Email: any; Password: any; }): Observable<any> {
     //return of(true);
-
+    this.currentUser.email = Model.Email;
     return this.Http.post<any>(environment.ApiPath + 'Identity/Authenticate', Model)
       .pipe(map(UserModel => {
         if (UserModel && UserModel.AccessToken) {
+          debugger
           localStorage.setItem('UserName', UserModel.UserName);
           localStorage.setItem('RefreshToken', UserModel.RefreshToken);
           localStorage.setItem('role', UserModel.Role);
           localStorage.setItem("user", JSON.stringify(UserModel));
           this.setToken(UserModel.AccessToken);
+          this.currentUser = UserModel;
         }
         return UserModel;
       }));
@@ -73,21 +76,37 @@ export class AuthService {
   getLSObject(key: string) {
     return JSON.parse(window.localStorage.getItem(key));
   }
-  resetPassword(Model: {Email: any}): Observable<any> {
+  resetPassword(Model: { Email: any }): Observable<any> {
 
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/SendResetPsw', Model);
   }
+  getUser() {
+    debugger
+    this.currentUser = this.getLSObject('user')
+  }
 
-  
-  updatePassword(Model: {userId: any; password: any;}): Observable<any> {
+  updatePassword(Model: { userId: any; password: any; }): Observable<any> {
 
     return this.Http.post<any>(environment.ApiPath + 'Identity/UpdatePassword', Model);
      
   }
 
+/**Logout API Calling */
+  LogOut() {    
+    if (!this.currentUser.Email) {
+      this.getUser();
+    }
+    let m = { email: this.currentUser.Email };
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${this.currentUser.AccessToken}`)
+     this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m, { headers }).subscribe(r=>{
+      localStorage.clear(); 
+     },error=>{
+      localStorage.clear();
+     },() =>{      
+      
+     })
 
-  LogOut() {
-    return this.Http.delete(environment.ApiPath + 'Identity/Log_Out');
   }
 
   CreateUser(UserModel) {
@@ -108,6 +127,7 @@ export class AuthService {
   }
 
   Islogin() {
+
     if (localStorage.getItem('token') === null) { return false; }
     else { return true; }
   }
@@ -116,7 +136,7 @@ export class AuthService {
   errorHandle(error) {
     let errormgs = {};
     if (error.error instanceof ErrorEvent) {
-            // get client side error
+      // get client side error
       errormgs = error.error.message;
     }
     else {
