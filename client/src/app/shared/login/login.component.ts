@@ -51,7 +51,13 @@ export class LoginComponent implements OnInit {
       const password = this.loginForm.get('password').value;
       const LoginModel = { Email: email, Password: password };
       await this.authService.login(LoginModel).subscribe(x => {
-        this.router.navigate(['first']);
+
+        if (!x.IsPswChangedOnFirstLogin) {
+          this.router.navigate(['resetPassword']);
+        } else {
+          this.router.navigate(['first']);
+        }
+        
       }, error => {
         if (error.message === Constants.DuplicateSession) {
           this.openDialog()

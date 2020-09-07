@@ -78,7 +78,7 @@ export class AuthService {
   }
   resetPassword(Model: { Email: any }): Observable<any> {
 
-    return this.Http.post<UserModel>(environment.ApiPath + 'Identity/sendResetPswLink', Model);
+    return this.Http.post<UserModel>(environment.ApiPath + 'Identity/SendResetPsw', Model);
   }
   getUser() {
     debugger
@@ -87,8 +87,8 @@ export class AuthService {
 
   updatePassword(Model: { userId: any; password: any; }): Observable<any> {
 
-    return this.Http.post<any>(environment.ApiPath + 'Identity/updatePassword', Model);
-
+    return this.Http.post<any>(environment.ApiPath + 'Identity/UpdatePassword', Model);
+     
   }
 
 /**Logout API Calling */
