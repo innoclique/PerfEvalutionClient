@@ -85,7 +85,7 @@ export class AuthService {
     this.currentUser = this.getLSObject('user')
   }
 
-  updatePassword(Model: { userId: any; password: any; }): Observable<any> {
+  updatePassword(Model: { userId: any; password: any; oldPassword:any }): Observable<any> {
 
     return this.Http.post<any>(environment.ApiPath + 'Identity/UpdatePassword', Model);
      

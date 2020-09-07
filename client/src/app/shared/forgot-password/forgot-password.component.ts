@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from '../../services/auth.service'
 import { ActivatedRoute, Router } from '@angular/router';
+import { Constants } from '../AppConstants';
+import { NotificationService } from 'src/app/services/notification.service';
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
@@ -16,7 +18,8 @@ export class ForgotPasswordComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router,) { }
+    private router: Router,
+    private snack: NotificationService) { }
 
   ngOnInit(): void {
     this.forgotPswForm = this.fb.group({
@@ -41,10 +44,17 @@ export class ForgotPasswordComponent implements OnInit {
       const resetModel = { Email: email };
       await this.authService.resetPassword(resetModel).subscribe(x => {
 
+        this.snack.success("Password Reset Successfully");
         this.router.navigate(['login']);
-      })
 
+      }, error => {
+        if (error.error.message === Constants.NoUserFound) {
+         this.snack.error(error.error.message)
+        } 
+        this.showSpinner = false;
+      })
     } catch (err) {
+      this.snack.error(err.message);
       this.showSpinner = false;
 
     }
