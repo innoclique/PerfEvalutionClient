@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from '../../services/auth.service'
 import { ActivatedRoute, Router } from '@angular/router';
+import { NotificationService } from 'src/app/services/notification.service';
+import { Constants } from '../AppConstants';
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
@@ -26,7 +28,8 @@ export class ResetPasswordComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router,) { }
+    private router: Router,
+    private snack: NotificationService) { }
 
   ngOnInit(): void {
 
@@ -73,10 +76,10 @@ export class ResetPasswordComponent implements OnInit {
       const control = formGroup.controls[controlName];
       var passw = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]))/;
 
-      var number = /(?=.*\d)/;
-      var small =   /(?=.*[a-z])/;
-      var big =  /(?=.*[A-Z])/;
-      var spl =  /(?=.*[#$_-])/;
+      var numberOnly = /(?=.*\d)/;
+      var smallLetters =   /(?=.*[a-z])/;
+      var capsLetters =  /(?=.*[A-Z])/;
+      var specialChars =  /(?=.*[#$_-])/;
 
      
       if (control.value.length <8 ){
@@ -85,37 +88,31 @@ export class ResetPasswordComponent implements OnInit {
         this.has8char=false;
       }else this.has8char=true;
 
-      if (!control.value.match(number)) {
+      if (!control.value.match(numberOnly)) {
         this.passwordFarmat= this.passwordFarmat+"one Number "
         control.setErrors({ confirmPattern: true });
         this.hasNumber=false;
       }else this.hasNumber=true;
 
-      if (!control.value.match(small)) {
+      if (!control.value.match(smallLetters)) {
         this.passwordFarmat= this.passwordFarmat+"one in Small Case "
         control.setErrors({ confirmPattern: true });
         this.hasLowercase=false;
       }else this.hasLowercase=true;
 
-      if (!control.value.match(big)) {
+      if (!control.value.match(capsLetters)) {
         this.passwordFarmat=  this.passwordFarmat+"one in Capital Case "
         control.setErrors({ confirmPattern: true });
         this.hasUppercase=false;
       }else this.hasUppercase=true;
-      if (!control.value.match(spl)) {
+      if (!control.value.match(specialChars)) {
         this.passwordFarmat=  this.passwordFarmat+"one of these Special Character(# $ _ - )"
         control.setErrors({ confirmPattern: true });
         this.hasSpecialChar=false;
       }else this.hasSpecialChar=true;
 
-      var number = /(?=.*\d)/;
-      var small =   /(?=.*[a-z])/;
-      var big =  /(?=.*[A-Z])/;
-      var spl =  /(?=.*[#$_-])/;
       var splCount = (control.value.match(/([#$_-])/g) || []).length;
       var numberCount = (control.value.match(/\d/g) || []).length;
-      // var smallCount = (control.value.match(/(?=.*[a-z])/g) || []).length;
-      // var numberCount = (control.value.match(/(?=.*\d)/g) || []).length;
 
       if ( control.value.length>=8&& splCount>=1 && numberCount>=1) {
         this.strength ='Weak';
@@ -144,13 +141,24 @@ export class ResetPasswordComponent implements OnInit {
 
       const password = this.resetForm.get('password').value;
       const oldPassword = this.resetForm.get('oldPassword').value;
-      const resetModel = {userId : user.ID, password: password};
+      const resetModel = {userId : user.ID, password: password,oldPassword:oldPassword};
       await this.authService.updatePassword(resetModel).subscribe(x => {
         
+        this.snack.success("Password updated successfully.")
         this.router.navigate(['first']);
+      }, error => {
+        if (error.error.message === Constants.InvalidOldPassword) {
+         this.snack.error(error.error.message)
+        } else if (error.error.message === Constants.NoUserFound) {
+          this.snack.error(error.error.message)
+         } 
+        this.showSpinner = false;
       })
+      
+      
 
     } catch (err) {
+      this.snack.error(err.message)
       this.showSpinner = false;
 
     }
