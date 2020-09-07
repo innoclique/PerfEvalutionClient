@@ -13,10 +13,12 @@ import {CustomMaterialModule} from '../custom-material/custom-material.module';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { AlertComponent } from './alert/alert.component';
+
 import { MatSpinnerOverlayComponent } from './mat-spinner-overlay/mat-spinner-overlay.component'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [NavbarComponent, 
@@ -26,9 +28,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     ForgotPasswordComponent, 
     ResetPasswordComponent,
     AlertComponent,
-    MatSpinnerOverlayComponent],
-  imports: [
-    
+    MatSpinnerOverlayComponent
+    ],
+  imports: [    
     CommonModule,
     FormsModule,
     HttpClientModule,
@@ -43,6 +45,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     }),
     CustomMaterialModule
   ],
+  entryComponents:[],
   exports:[NavbarComponent,AlertComponent]
 })
 export class SharedModule { }
