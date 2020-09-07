@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
         
       }, error => {
         if (error.error.message === Constants.DuplicateSession) {
-          this.openDialog()
+          this.openDuplicateSessionDialog()
         } if (error.error.message === Constants.InvalidCredentials) {
 
         }
