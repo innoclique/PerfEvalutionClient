@@ -1,6 +1,6 @@
 <mat-card class="example-card">
     <mat-card-header>
-      <mat-card-title>Login</mat-card-title>
+      <mat-card-title> {{'Login.Login' | translate }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="loginForm" class="example-form">
@@ -8,13 +8,13 @@
           <tr>
             <td>
               <mat-form-field class="example-full-width">
-              <input matInput placeholder="Username" formControlName="username"  name="username" required>
+              <input matInput placeholder="{{'Login.UserName' | translate }}" formControlName="username"  name="username" required>
               </mat-form-field>
             </td>
           </tr>
           <tr>
           <td><mat-form-field class="example-full-width">
-            <input matInput placeholder="Password"  formControlName="password" type="password" name="password" required>
+            <input matInput placeholder="{{'Login.Password' | translate }}"  formControlName="password" type="password" name="password" required>
           </mat-form-field>
           <a class="forgot-password"  routerLink='/forgotPassword'> Forgot
             Password? </a>
@@ -25,9 +25,8 @@
       <app-spinner [style.display]="showSpinner ? 'block' : 'none'" overlay="true"></app-spinner>
       
     </mat-card-content>
-    <mat-card-actions>
-        
-      <button [disabled]="!loginForm.valid"   mat-raised-button (click)="onSubmit()" color="primary">Login</button>
+    <mat-card-actions>        
+      <button [disabled]="!loginForm.valid"   mat-raised-button (click)="onSubmit()" color="primary">{{'Login.Login' | translate }}</button>
     </mat-card-actions>
   </mat-card>
 

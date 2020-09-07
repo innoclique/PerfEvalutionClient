@@ -29,7 +29,7 @@ const appRoutes: Routes = [
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
-    CustomMaterialModule,
+    CustomMaterialModule,   
     RouterModule.forRoot(appRoutes)
   ],
   providers: [],
