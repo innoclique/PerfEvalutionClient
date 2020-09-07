@@ -40,6 +40,9 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
     this.alert = new AlertDialog();
+    if(this.authService.Islogin()){
+      this.router.navigate(['first']);
+    }
   }
   /**Login Submit */
   async onSubmit() {
@@ -55,13 +58,16 @@ export class LoginComponent implements OnInit {
       const LoginModel = { Email: email, Password: password };
 
       await this.authService.login(LoginModel).subscribe(x => {
-
-        if (!x.IsPswChangedOnFirstLogin) {
+        
+        if (!x.Valid && x.Error === Constants.DuplicateSession) {
+          this.openDuplicateSessionDialog();
+        }
+        else if (!x.IsPswChangedOnFirstLogin) {
           this.router.navigate(['resetPassword']);
         } else {
           this.router.navigate(['first']);
         }
-        
+
       }, error => {
         if (error.error.message === Constants.DuplicateSession) {
           this.openDuplicateSessionDialog()
@@ -189,6 +195,7 @@ export class LoginComponent implements OnInit {
     dialogRef.afterClosed().subscribe(resp => {
       this.authService.LogOut()
       console.log('alert dialog', resp);
+      this.showSpinner=false;
     })
   }
 }
