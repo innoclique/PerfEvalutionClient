@@ -9,6 +9,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { Constants } from '../AppConstants';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service'
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,9 @@ export class LoginComponent implements OnInit {
     public dialog: MatDialog,
     public themeService: ThemeService,
     private snack: NotificationService,
-    private perfApp: PerfAppService) { }
+    private perfApp: PerfAppService,
+    public translate: TranslateService) { }
+
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -50,17 +53,22 @@ export class LoginComponent implements OnInit {
       const email = this.loginForm.get('username').value;
       const password = this.loginForm.get('password').value;
       const LoginModel = { Email: email, Password: password };
-      await this.authService.login(LoginModel).subscribe(user => {
-        if (user.User && !user.User.TnCAccepted) {
-          this.openTnCDialog();
+
+      await this.authService.login(LoginModel).subscribe(x => {
+
+        if (!x.IsPswChangedOnFirstLogin) {
+          this.router.navigate(['resetPassword']);
+        } else {
+          this.router.navigate(['first']);
         }
-        this.router.navigate(['first']);
+        
       }, error => {
         if (error.error.message === Constants.DuplicateSession) {
-          this.openDuplicateSessionDialog()
-        } if (error.message === Constants.InvalidCredentials) {
-          this.snack.error('Invalid Credentials')
+          this.openDialog()
+        } if (error.error.message === Constants.InvalidCredentials) {
+
         }
+        this.snack.error(this.translate.instant('Login.InvalidCredentials'));
 
         this.showSpinner = false;
       })

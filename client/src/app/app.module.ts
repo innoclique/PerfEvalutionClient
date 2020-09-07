@@ -34,6 +34,7 @@ const appRoutes: Routes = [
     CustomMaterialModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule
+
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },AuthService],
   bootstrap: [AppComponent]
