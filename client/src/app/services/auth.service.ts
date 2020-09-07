@@ -5,14 +5,14 @@ import { Observable, throwError, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map, retry, catchError, tap, mapTo } from 'rxjs/operators';
 import { UserModel } from '../Models/User';
-import { error } from 'console';
+
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  currentUser: any = {};
+  currentUser: any ;
   constructor(private Http: HttpClient) { }
   FindEmail(Email): Observable<UserModel> {
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/GetUserByEmail', { Email })
@@ -38,14 +38,14 @@ export class AuthService {
 
   login(Model: { Email: any; Password: any; }): Observable<any> {
     //return of(true);
-    this.currentUser.email = Model.Email;
+    
     return this.Http.post<any>(environment.ApiPath + 'Identity/Authenticate', Model)
       .pipe(map(UserModel => {
         if (UserModel && UserModel.AccessToken) {          
           localStorage.setItem('UserName', UserModel.UserName);
           localStorage.setItem('RefreshToken', UserModel.RefreshToken);
           localStorage.setItem('role', UserModel.Role);
-          localStorage.setItem("user", JSON.stringify(UserModel));
+          localStorage.setItem("User", JSON.stringify(UserModel.User));
           this.setToken(UserModel.AccessToken);
           this.currentUser = UserModel;
         }
@@ -81,18 +81,17 @@ export class AuthService {
   }
   getUser() {
     debugger
-    this.currentUser = this.getLSObject('user')
+    this.currentUser = this.getLSObject('User')
   }
 
   updatePassword(Model: { userId: any; password: any; }): Observable<any> {
-
     return this.Http.post<any>(environment.ApiPath + 'Identity/updatePassword', Model);
-
   }
 
 /**Logout API Calling */
   LogOut() {    
-    if (!this.currentUser.Email) {
+    debugger
+    if (!this.currentUser) {
       this.getUser();
     }
     let m = { email: this.currentUser.Email };
@@ -139,7 +138,15 @@ export class AuthService {
     if (localStorage.getItem('token') === null) { return false; }
     else { return true; }
   }
-
+getCurrentUser(){
+  if(!this.currentUser.Email){
+    const _user=this.getLSObject('User')
+    if(_user){
+      this.currentUser=_user;
+    }
+  }
+  return this.currentUser;
+}
 
   errorHandle(error) {
     let errormgs = {};

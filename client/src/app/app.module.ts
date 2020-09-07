@@ -13,6 +13,7 @@ import { CustomMaterialModule } from './custom-material/custom-material.module';
 import { ForgotPasswordComponent } from './shared/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './shared/reset-password/reset-password.component';
 import {AuthInterceptor} from './services/auth.interceptor';
+import { AuthService } from './services/auth.service';
 const appRoutes: Routes = [
   { path: '', component: AppComponent, data: { title: 'First Component' } },
   { path: 'first', component: FirstComponent, data: { title: 'First Component' } },
@@ -34,7 +35,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     HttpClientModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

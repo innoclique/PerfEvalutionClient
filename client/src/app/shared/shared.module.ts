@@ -14,7 +14,8 @@ import {CustomMaterialModule} from '../custom-material/custom-material.module';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { AlertComponent } from './alert/alert.component';
-import { MatSpinnerOverlayComponent } from './mat-spinner-overlay/mat-spinner-overlay.component'
+import { MatSpinnerOverlayComponent } from './mat-spinner-overlay/mat-spinner-overlay.component';
+
 
 @NgModule({
   declarations: [NavbarComponent, 
@@ -24,9 +25,9 @@ import { MatSpinnerOverlayComponent } from './mat-spinner-overlay/mat-spinner-ov
     ForgotPasswordComponent, 
     ResetPasswordComponent,
     AlertComponent,
-    MatSpinnerOverlayComponent],
-  imports: [
-    
+    MatSpinnerOverlayComponent
+    ],
+  imports: [    
     CommonModule,
     FormsModule,
     HttpClientModule,
@@ -34,6 +35,7 @@ import { MatSpinnerOverlayComponent } from './mat-spinner-overlay/mat-spinner-ov
     RouterModule,
     CustomMaterialModule
   ],
+  entryComponents:[],
   exports:[NavbarComponent,AlertComponent]
 })
 export class SharedModule { }
