@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
   @ViewChild('drawer', { static: false }) 
   drawer: MatSidenav;
   isDarkTheme: Observable<boolean>;
+  navigationMenu:any;
   constructor(public authService: AuthService,
     private router: Router,
     private themeService: ThemeService,
@@ -25,6 +26,7 @@ export class NavbarComponent implements OnInit {
   opened: boolean;
   ngOnInit(): void {
     this.isDarkTheme = this.themeService.isDarkTheme;
+    this.setNavigationMenu();
   }
   toggleDarkTheme(checked: boolean) {
     this.themeService.setDarkTheme(checked);
@@ -37,4 +39,12 @@ export class NavbarComponent implements OnInit {
   switchLang(lang: string) {
     this.translate.use(lang);
   }
+setNavigationMenu(){
+  this.navigationMenu= [
+    { text: "Client", path: "psa/clientsetup" },
+    { text: "Users", path: "admin-users" },
+    { text: "Company", path: "company" }
+    
+  ]
+}
 }

@@ -22,7 +22,17 @@
   <mat-sidenav-container  class="example-container">
     <mat-sidenav *ngIf="authService.Islogin()" #drawer mode="over" opened role="navigation">
       <mat-nav-list>
-        <a mat-list-item routerLink='/first'>First Component</a>
+        
+        <a *ngFor="let navItem of navigationMenu"
+        mat-list-item
+        mat-ripple
+        [style.position]="'relative'"
+        routerLinkActive="selected"
+        [routerLink]="['/'+navItem.path]">
+         <!--<md-icon *ngIf="navItem.icon">{{navItem.icon}}</md-icon>-->
+         <span>{{navItem.text}}</span>
+     </a>
+        <a  mat-list-item routerLink='/first'>First Component</a>
         <a mat-list-item routerLink='/second'>Second Component</a>
         <a *ngIf="!authService.Islogin()" mat-list-item routerLink='/login'>Login</a>
         <a *ngIf="authService.Islogin()" (click)="!!logOut()" mat-list-item [routerLink]="" >Logout</a>

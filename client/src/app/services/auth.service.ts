@@ -79,39 +79,16 @@ export class AuthService {
 
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/SendResetPsw', Model);
   }
-  getUser() {
-    debugger
+  getUser() {    
     this.currentUser = this.getLSObject('User')
   }
-
-
-
   updatePassword(Model: { userId: any; password: any; oldPassword:any }): Observable<any> {
-
     return this.Http.post<any>(environment.ApiPath + 'Identity/UpdatePassword', Model);
-     
-
   }
 
 /**Logout API Calling */
-  LogOut() {    
-    debugger
-    if (!this.currentUser) {
-      this.getUser();
-    }
-    let m = { email: this.currentUser.Email };
-    // let headers = new HttpHeaders();
-    // headers = headers.set('Authorization', `Bearer ${this.currentUser.AccessToken}`)
-     this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m).subscribe(r=>{
-      localStorage.clear(); 
-     },error=>{
-      localStorage.clear();
-     },() =>{      
-      
-     })
-
-
-     return this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m).pipe(
+  LogOut() {        
+     return this.Http.delete<any>(environment.ApiPath + 'Identity/Log_Out').pipe(
       tap(() => localStorage.clear()),
       mapTo(true),
       catchError(error => {

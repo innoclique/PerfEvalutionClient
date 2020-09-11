@@ -55,8 +55,10 @@ export class LoginComponent implements OnInit {
       const LoginModel = { Email: email, Password: password };
 
       await this.authService.login(LoginModel).subscribe(x => {
-
-        if (!x.IsPswChangedOnFirstLogin) {
+if(!x.TnCAccepted){
+this.openTnCDialog();
+}
+        else if (!x.IsPswChangedOnFirstLogin) {
           this.router.navigate(['resetPassword']);
         } else {
           this.router.navigate(['first']);

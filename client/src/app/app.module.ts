@@ -14,6 +14,7 @@ import { ForgotPasswordComponent } from './shared/forgot-password/forgot-passwor
 import { ResetPasswordComponent } from './shared/reset-password/reset-password.component';
 import {AuthInterceptor} from './services/auth.interceptor';
 import { AuthService } from './services/auth.service';
+
 const appRoutes: Routes = [
   { path: '', component: AppComponent, data: { title: 'First Component' } },
   { path: 'first', component: FirstComponent, data: { title: 'First Component' } },
@@ -25,6 +26,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     SharedModule,
     CustomMaterialModule,
-    RouterModule.forRoot(appRoutes),
+    
     HttpClientModule
 
   ],
