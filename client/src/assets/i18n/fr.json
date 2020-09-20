@@ -6,6 +6,19 @@
         "ForgotPassword": "mot de passe oublié?",
         "InvalidCredentials":"Les informations d'identification invalides"
     },
+    "ResetPassword":{
+        "CurrentPassword":"Mot de passe actuel",
+        "NewPassword":"nouveau mot de passe",
+        "ConfirmPassword":"Confirmez le mot de passe",
+        "Submit":"Soumettre"
+
+    },
+    "ForgotPassword":{
+        "ForgotPassword":"Mot de passe oublié",
+        "SendResetLink":"Envoyer le lien de réinitialisation",
+        "GoBackToLogin":"Revenir à la connexion"
+
+    },
     "Footer":{
         
     }

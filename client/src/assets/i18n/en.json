@@ -6,6 +6,20 @@
         "ForgotPassword": "Forgot Password",
         "InvalidCredentials":"Invalid Credentials"
     },
+    "ResetPassword":{
+        "ResetPassword":"Reset Password",
+        "CurrentPassword":"Current Password",
+        "NewPassword":"New Password",
+        "ConfirmPassword":"Confirm Password",
+        "Submit":"Submit"
+
+    },
+    "ForgotPassword":{
+        "ForgotPassword":"Forgot Password",
+        "SendResetLink":"Send Reset Link",
+        "GoBackToLogin":"Go Back To Login"
+
+    },
     "Footer":{
         
     }
